@@ -1,0 +1,81 @@
+:root{
+	--button-width: 150px;
+}
+
+body{
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 10px;
+}
+
+/* Header */
+header{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+header a{
+	text-decoration: none;
+	font-size: 1.5rem;
+	padding-left: 20px;
+}
+header h2{
+	font-weight: normal;
+	font-size: 1.5rem;
+	padding-right: 20px;
+}
+
+main{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}	
+
+/* Start Page */
+.title, .description{
+	width: 50%;
+	text-align: center;
+	margin: 20px 25%;
+	margin-top: 100px;
+}
+.button, .button1, .button2, .button3, .button4{
+	background: #352479;
+	color: white;
+	border: none;
+	border-radius: 7px;
+	padding: 10px 25px;
+	font-size: 1.1rem;
+	cursor: pointer;
+}
+.button{
+	margin: 0 auto;
+}
+.description{
+	font-size: 1.5rem;
+	width: 70%;
+	margin: 0 15%;
+	margin-bottom: 20px;
+}
+
+/* Question Pages */
+
+.question_title{
+	width: 50%;
+	margin: 20px 25%;
+	margin-top: 100px;
+	text-align: left;
+}
+
+.button_container{
+	width: 50%;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.button1, .button2, .button3, .button4{
+	width: var(--button-width);
+	margin-top: 4px;
+	margin-bottom: 4px;
+	margin-left: 0;
+	margin-right: calc(100% - var(--button-width));
+	text-align: left;
+}
