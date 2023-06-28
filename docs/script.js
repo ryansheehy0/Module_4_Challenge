@@ -1,11 +1,32 @@
-const startButton = document.getElementById("start_button")
+// Utility functions
+function shuffle(array){
+	let newArray = []
+	while(array.length !== 0){
+		let randomIndex = Math.floor(Math.random() * array.length)
+		newArray.push(array.splice(randomIndex, 1)[0])
+	}
+	return newArray
+}
+
+// Global Variables
 const main = document.querySelector("main")
+const timer = document.querySelector("header h2")
+const viewHighScores = document.querySelector("header a")
+var startButton
 
 var button1
 var button2
 var button3
 var button4
 
+var secondsLeft
+var interval
+
+var highScores = [] // Array of arrays. [[name1, score1], [name2, score2]]
+
+var questions
+
+//Functions
 function setButtons(){
 	// Gets the buttons from the new dom
 	button1 = document.querySelector(".button1")
@@ -26,8 +47,8 @@ function htmlQuestion(title, button1, button2, button3, button4, isFirstQuestion
 	`
 	if(!isFirstQuestion){
 		returnHTML += `
-			<hr style="width: '100%'">
-			<h2> ${isCorrect ? "Correct!" : "Wrong!"}</h2>
+			<hr>
+			<h2 class="is_correct"> ${isCorrect ? "Correct!" : "Wrong!"}</h2>
 		`
 	}
 	return returnHTML
@@ -36,9 +57,13 @@ function htmlQuestion(title, button1, button2, button3, button4, isFirstQuestion
 function buttonClicked(button, wasCorrect, questionOrder){
 	button.addEventListener("click", () => {
 		questionOrder.shift() // Removes the first question
-		if (questionOrder.length === 0){ // if no more questions or time is 0
-			scoreScreen()
+		if (questionOrder.length === 0){ // if no more questions
+			clearInterval(interval)
+			scoreScreen(true, wasCorrect)
 		}else{
+			if(!wasCorrect){
+				secondsLeft -= 10
+			}
 			// Ask next question
 			questionOrder[0](false, wasCorrect, questionOrder)
 		}
@@ -130,20 +155,97 @@ const question5 = (isFirstQuestion, isCorrect, questionorder) => {
 	buttonClicked(button4, true, questionorder)
 }
 
-function scoreScreen(){
-	main.innerHTML = `
+function scoreScreen(isThereAnAnswere, isCorrect){
+	 let html = `
 		<h1 class="question_title">All done!</h1>
-		<p>Your final score is 22.</p>
-		<label for="initials">Enter initials:</label>	
-		<input type="text" id="initials" name="initials">
-		<button class="submit_button">Submit</button>
+		<h2 class="final_score">Your final score is ${secondsLeft}.</h2>
+		<div class="submit_container">
+			<h2 class="name">Enter name:</h2>	
+			<input type="text" id="inputName">
+			<button class="submit_button">Submit</button>
+		</div>
 	`
+	if(isThereAnAnswere){
+		html += `
+			<hr>
+			<h2 class="is_correct"> ${isCorrect ? "Correct!" : "Wrong!"}</h2>
+		`
+	}
+	main.innerHTML = html
+	const submitButton = document.querySelector(".submit_button")
+	const inputName = document.querySelector("#inputName")
+	submitButton.addEventListener("click", () => {
+		// Add to high scores
+		let indexAdded = 0
+		for(indexAdded = 0; indexAdded < highScores.length; indexAdded++){
+			if(secondsLeft > highScores[indexAdded][1]){
+				break
+			}
+		}
+		highScores.splice(indexAdded, 0, [inputName.value, secondsLeft]) // Add score in the correct position
+		// Display high score screen
+		highScoreScreen()
+	})
 }
 
-let questions = [question1, question2, question3, question4, question5]
-// Randomly shuffle array
+function highScoreScreen(){
+	timer.style.visibility = "hidden"
+	viewHighScores.style.visibility = "hidden"
+	html = `
+		<h1 class="question_title">High Scores</h1>
+	`
+	for(let i = 0; i < highScores.length; i++){
+		html += `<p class="score">${i + 1}. ${highScores[i][0]/*name*/} - ${highScores[i][1]/*score*/}</p>`	
+	}
+	html += `
+		<div class="high_score_button_container">
+			<button class="go_back_button">Go back</button>
+			<button class="clear_high_scores">Clear high scores</button>
+		</div>
+	`
+	main.innerHTML = html
+	const goBackButton = document.querySelector(".go_back_button")
+	const clear_high_scores = document.querySelector(".clear_high_scores")
+	goBackButton.addEventListener("click", () => {
+		main.innerHTML = `
+			<h1 class="title">Coding Quiz Challenge</h1>
+			<p class="description">Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers
+				will penalize your score/time by ten seconds!</p>
+			<button id="start_button" class="button">Start Quiz</button>
+		`
+		start()
+	})
+	clear_high_scores.addEventListener("click", () => {
+		highScores = []
+		highScoreScreen()
+	})
+}
 
-startButton.addEventListener("click", () => {
-	// Set timer
-	questions[0](true, false, questions)
+function start(){
+	startButton = document.getElementById("start_button")
+	timer.style.visibility = "visible"
+	viewHighScores.style.visibility = "visible"
+	secondsLeft = 75
+	clearInterval(interval)
+	questions = [question1, question2, question3, question4, question5]
+	questions = shuffle(questions) // Randomly shuffle array
+	startButton.addEventListener("click", () => {
+		interval = setInterval(() => {
+			timer.textContent = `Time: ${secondsLeft}`
+			secondsLeft--
+			if(secondsLeft === 0){
+				clearInterval(interval)
+				scoreScreen(false, false)
+			}
+		}, 1000)
+		questions[0](true, false, questions)
+	})
+}
+
+// Start
+start()
+
+viewHighScores.addEventListener("click", () => {
+	clearInterval(interval)
+	highScoreScreen()
 })

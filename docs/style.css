@@ -29,15 +29,8 @@ main{
 	flex-wrap: wrap;
 	justify-content: center;
 }	
-
-/* Start Page */
-.title, .description{
-	width: 50%;
-	text-align: center;
-	margin: 20px 25%;
-	margin-top: 100px;
-}
-.button, .button1, .button2, .button3, .button4{
+/* All Buttons */
+.button, .button1, .button2, .button3, .button4, .submit_button, .go_back_button, .clear_high_scores{
 	background: #352479;
 	color: white;
 	border: none;
@@ -45,6 +38,14 @@ main{
 	padding: 10px 25px;
 	font-size: 1.1rem;
 	cursor: pointer;
+}
+
+/* Start Page */
+.title, .description{
+	width: 50%;
+	text-align: center;
+	margin: 20px 25%;
+	margin-top: 100px;
 }
 .button{
 	margin: 0 auto;
@@ -67,6 +68,7 @@ main{
 
 .button_container{
 	width: 50%;
+	margin: 0 25%;
 	display: flex;
 	flex-wrap: wrap;
 }
@@ -78,4 +80,68 @@ main{
 	margin-left: 0;
 	margin-right: calc(100% - var(--button-width));
 	text-align: left;
+}
+
+hr{
+	width: 50%;
+	margin: 0 25%;
+	margin-top: 20px;
+	color: gray;
+
+}
+
+.is_correct{
+	width: 50%;
+	color: gray;
+	text-align: left;
+}
+
+/* Score Screen */
+.final_score{
+	width: 50%;
+	margin: 0 25%;
+	text-align: left;
+}
+
+.submit_container{
+	width: 50%;
+	display: flex;
+	align-items: center;
+}
+
+.name{
+	text-align: left;
+	width: auto;
+	margin-right: 10px;
+}
+
+input{
+	display: inline;
+	height: 28px;
+}
+
+.submit_button{
+	margin-left: 10px;
+	padding-top: 6px;
+	padding-bottom: 7px;
+}
+
+/* High Scores Screen */
+.score{
+	width: 50%;
+	margin: 0 25%;
+	display: block;
+	background: #d9d5ea;
+	font-size: 2rem;
+}
+
+.high_score_button_container{
+	display: flex;
+	width: 50%;
+	margin: 10px 25%;
+	justify-content: left;
+}
+
+.go_back_button{
+	margin-right: 10px;
 }
