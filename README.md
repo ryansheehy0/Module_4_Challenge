@@ -15,4 +15,3 @@ You can check out the website through this [link](https://ryansheehy0.github.io/
 
 ## Source Code
 This source code can be found within the folder docs.
-
